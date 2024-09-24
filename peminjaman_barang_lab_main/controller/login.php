@@ -20,16 +20,16 @@ if (isset($_POST['submit'])) {
 
     if ($result && $result->num_rows > 0) {
         $row = mysqli_fetch_assoc($result);
-        // $_SESSION['nama'] = $row['nama'];
-        // header("Location: ../dashboard.php");
-        // exit();
-
-        if($row['role'] == "siswa") {
-            $_SESSION['nama'] = $name;
+    
+        // Tambahkan user_id ke session
+        $_SESSION['user_id'] = $row['id'];  // Menyimpan user_id ke dalam session
+    
+        if ($row['role'] == "siswa") {
+            $_SESSION['nama'] = $row['nama'];  // Menggunakan $row['nama'] yang benar
             $_SESSION['role'] = "siswa";
             header('Location: ../dashboard.php');
-        } else if($row['role'] == "admin") {
-            $_SESSION['nama'] = $name;
+        } else if ($row['role'] == "admin") {
+            $_SESSION['nama'] = $row['nama'];  // Menggunakan $row['nama'] yang benar
             $_SESSION['role'] = "admin";
             header('Location: ../dashboardadmin.php');
         } else {
@@ -38,6 +38,7 @@ if (isset($_POST['submit'])) {
     } else {
         echo "<script>alert('Username atau Password salah, coba lagi.')</script>";
     }
+    
 }
 
 

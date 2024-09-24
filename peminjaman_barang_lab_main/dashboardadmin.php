@@ -11,93 +11,124 @@ if ($_SESSION['role'] == "") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 56px;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-        }
-        .sidebar a {
-            color: white;
-            padding: 15px;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007bff;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <h2>
+          <a class="navbar-brand" href="#">Peminjaman Barang Lab Admin</a>
+        </h2>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasDarkNavbar"
+          aria-controls="offcanvasDarkNavbar"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="offcanvas offcanvas-end text-bg-dark"
+          tabindex="-1"
+          id="offcanvasDarkNavbar"
+          aria-labelledby="offcanvasDarkNavbarLabel"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
+              Dark offcanvas
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              <!-- <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#"
+                  >Home</a
+                >
+              </li> -->
+              <!-- <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-primary btn-lg" href="#">Link</a>
+              </li> -->
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Menu
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="ui/labs/labs.php">Daftar Ruangan</a></li>
+                  <li>
+                    <a class="dropdown-item" href="ui/barang/barang.php">Barang</a>
+                  </li>
+                  <!-- <!-- <li>
+                    <hr class="dropdown-divider" />
+                  </li> -->
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      >Data Pinjam Barang</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                        User
+                    </a>
+                  </li> 
+                  
+                </ul>
+              </li>
+            </ul>
+            <!-- <form class="d-flex mt-3" role="search">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-success" type="submit">Search</button>
+            </form> -->
+          </div>
         </div>
+      </div>
     </nav>
 
-    <!-- Sidebar -->
-    <div class="sidebar bg-dark">
-        <a href="#dashboard">Dashboard</a>
-        <a href="#barang">Detail Barang</a>
-        <a href="#ruang">Detail Ruang</a>
-        <a href="#rekap">Rekap Peminjaman</a>
-        <a href="#users">Daftar User</a>
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-        <div id="dashboard">
-            <h1>Dashboard</h1>
-            <p>Selamat datang di dashboard admin.</p>
-        </div>
-
-        <div id="barang">
-            <h1>Detail Barang</h1>
-            <p>Ini adalah halaman untuk melihat detail barang yang dipinjam.</p>
-        </div>
-
-        <div id="ruang">
-            <h1>Detail Ruang</h1>
-            <p>Ini adalah halaman untuk melihat detail ruang.</p>
-        </div>
-
-        <div id="rekap">
-            <h1>Rekap Data Peminjaman</h1>
-            <p>Ini adalah halaman untuk melihat rekap data peminjaman barang.</p>
-        </div>
-
-        <div id="users">
-            <h1>Daftar User</h1>
-            <p>Ini adalah halaman untuk melihat daftar pengguna.</p>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
 </body>
 </html>

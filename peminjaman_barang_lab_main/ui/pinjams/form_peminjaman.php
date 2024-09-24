@@ -1,13 +1,6 @@
 <?php
-session_start(); // Tambahkan ini
+session_start(); // Pa
 include '../../config/config.php';
-
-if(!isset($_SESSION['user_id'])){
-    header('Location: ../../ui/login.php'); // Redirect ke halaman login jika belum login
-    exit();
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +27,9 @@ if(!isset($_SESSION['user_id'])){
 
         <label for="jumlah">Jumlah:</label>
         <input type="number" name="jumlah" id="jumlah" required><br>
+
+        <!-- <label for="tgl_peminjaman">Tanggal Pinjam</label> -->
+        <!-- <input inputmode="date" type="text" name="tgl_peminjaman" id="tgl_peminjaman" requiered><br> --> 
 
         <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
         <button type="submit" name="submit">Pinjam</button>
