@@ -37,54 +37,82 @@ if ($result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Edit Barang</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Centering the card in the middle of the page */
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* Optional: for smaller screens, the form is fully responsive */
+        @media (max-width: 576px) {
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h2>Edit Data Barang</h2>
-    </header>
-    <form action="../../controller/barang/edit_brg.php" method="post">
-        <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($barang['id']); ?>" />
-        
-        <div>
-            <label for="nama_barang">Nama Barang :</label>
-            <input type="text" name="nama_barang" id="nama_barang" value="<?php echo htmlspecialchars($barang['nama_barang']); ?>">
+<body >
+    <div class="card">
+        <div class="card-header bg-warning text-white text-center">
+            <h3 class="card-title">Edit Data Barang</h3>
         </div>
+        <div class="card-body">
+            <form action="../../controller/barang/edit_brg.php" method="post">
+                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($barang['id']); ?>" />
 
-        <br>
+                <div class="mb-3">
+                    <label for="nama_barang" class="form-label">Nama Barang:</label>
+                    <input type="text" name="nama_barang" id="nama_barang" class="form-control" value="<?php echo htmlspecialchars($barang['nama_barang']); ?>" required>
+                </div>
 
-        <div>
-            <label for="jumlah_pinjam">Stock Barang :</label>
-            <input type="number" name="jumlah_pinjam" id="jumlah_pinjam" value="<?php echo htmlspecialchars($barang['jumlah_pinjam']); ?>">
+                <div class="mb-3">
+                    <label for="jumlah_pinjam" class="form-label">Stock Barang:</label>
+                    <input type="number" name="jumlah_pinjam" id="jumlah_pinjam" class="form-control" value="<?php echo htmlspecialchars($barang['jumlah_pinjam']); ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nama_ruang" class="form-label">Nama Ruang:</label>
+                    <select id="nama_ruang" name="ruang_id" class="form-select" required>
+                        <?php
+                        // Tampilkan opsi nama ruang
+                        foreach ($labs as $lab) {
+                            $selected = ($barang['ruang_id'] == $lab['id']) ? ' selected' : '';
+                            echo "<option value=\"" . $lab['id'] . "\"" . $selected . ">" . $lab['nama_ruang'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Deskripsi:</label>
+                    <textarea name="description" id="description" class="form-control" rows="4" required><?php echo htmlspecialchars($barang['description']); ?></textarea>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" name="submit" value="simpan"class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <br>
-
-        <div>
-            <label for="nama_ruang">Nama Ruang:</label>
-            <select id="nama_ruang" name="ruang_id" required>
-                <?php
-                // Tampilkan opsi nama ruang
-                foreach ($labs as $lab) {
-                    $selected = ($barang['ruang_id'] == $lab['id']) ? ' selected' : '';
-                    echo "<option value=\"" . $lab['id'] . "\"" . $selected . ">" . $lab['nama_ruang'] . "</option>";
-                }
-                ?>
-            </select>
-            <br>
-        </div>
-
-        <br>
-
-        <div>
-            <label for="description">Deskripsi :</label>
-            <input type="text" name="description" id="description" value="<?php echo htmlspecialchars($barang['description']); ?>">
-        </div>
-
-        <br>
-
-        <div>
-            <input type="submit" value="Simpan" name="submit">
-        </div>
-    </form>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

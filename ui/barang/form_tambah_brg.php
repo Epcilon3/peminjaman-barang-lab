@@ -19,55 +19,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Tambah Barang</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Centering the card in the middle of the page */
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        /* Optional: for smaller screens, the form is fully responsive */
+        @media (max-width: 576px) {
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h2>Form Tambah Barang Baru</h2>
-    </header>
-    <form action="../../controller/barang/tambah_brg.php" method="POST">
-        <div>
-            <label for="nama_barang">Nama Barang :</label>
-            <input type="text" name="nama_barang" id="nama_barang" required>
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="card-title">Form Tambah Barang Baru</h3>
         </div>
+        <div class="card-body">
+            <form action="../../controller/barang/tambah_brg.php" method="POST">
+                <div class="mb-3">
+                    <label for="nama_barang" class="form-label">Nama Barang:</label>
+                    <input type="text" name="nama_barang" id="nama_barang" class="form-control" placeholder="Masukkan nama barang" required>
+                </div>
 
-        <br>
+                <div class="mb-3">
+                    <label for="jumlah_pinjam" class="form-label">Stock Barang:</label>
+                    <input type="number" name="jumlah_pinjam" id="jumlah_pinjam" class="form-control" placeholder="Masukkan jumlah stok barang" required>
+                </div>
 
-        <div>
-            <label for="jumlah_pinjam">Stock Barang :</label>
-            <input type="number" name="jumlah_pinjam" id="jumlah_pinjam" required>
+                <div class="mb-3">
+                    <label for="nama_ruang" class="form-label">Nama Ruang:</label>
+                    <select id="nama_ruang" name="nama_ruang" class="form-select" required>
+                        <option value="" disabled selected>Pilih Ruang</option>
+                        <?php
+                        // Tampilkan opsi nama ruang
+                        foreach ($labs as $lab) {
+                            echo "<option value=\"" . $lab['id'] . "\">" . $lab['nama_ruang'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea name="description" id="description" class="form-control" rows="4" placeholder="Deskripsi barang" required></textarea>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" name="submit" value="submit" class="btn btn-success btn-block">Tambah Barang</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <br>
-
-        <!-- <div>
-            <label for="ruang_id">Lokasi Ruangan :</label>
-            <input type="number" name="ruang_id" id="ruang_id" required>
-        </div> -->
-
-        <div>
-        <label for="nama_ruang">Nama Ruang:</label>
-            <select id="nama_ruang" name="nama_ruang" required>
-                <?php
-                // Tampilkan opsi nama ruang
-                foreach ($labs as $lab) {
-                    echo "<option value=\"" . $lab['id'] . "\">" . $lab['nama_ruang'] . "</option>";
-                }
-                ?>
-            </select>
-            <br>
-        </div>
-
-        <br>
-
-        <div>
-            <label for="description">Description :</label>
-            <input type="Text" name="description" id="description" required>
-        </div>
-        <br>
-        <div>
-            <input type="submit" value="submit" name="submit">
-        </div>
-
-    </form>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

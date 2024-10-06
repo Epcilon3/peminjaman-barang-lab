@@ -3,7 +3,7 @@
 $host = 'localhost'; // Host database
 $username = 'root';  // Username database
 $password = '';      // Password database
-$database = 'db_testpinjambarang'; // Nama database
+$database = 'pinjambarang'; // Nama database
 
 // Buat koneksi
 $conn = new mysqli($host, $username, $password, $database);

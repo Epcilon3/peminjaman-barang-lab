@@ -6,32 +6,41 @@ if ($_SESSION['role'] == "") {
     header("Location: index.php?pesan=gagal");
 }
 
-// Pastikan user_id ada dalam session
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../../ui/login.php');
-    exit();
-}
+// Query untuk menghitung jumlah seluruh siswa
+$sql_total_siswa = "SELECT COUNT(*) AS total_siswa FROM user WHERE role = 'siswa';";
+$query_total_siswa = mysqli_query($conn, $sql_total_siswa);
+$result_total_siswa = mysqli_fetch_assoc($query_total_siswa);
+$total_siswa = $result_total_siswa['total_siswa'];
 
-$user_id = $_SESSION['user_id']; // Ambil user_id dari session
-$nama_user = $_SESSION['nama_user']; // Ambil nama_user dari session
+// Query untuk menghitung jumlah seluruh siswa
+$sql_total_admin = "SELECT COUNT(*) AS total_admin FROM user WHERE role = 'admin';";
+$query_total_admin = mysqli_query($conn, $sql_total_admin);
+$result_total_admin = mysqli_fetch_assoc($query_total_admin);
+$total_admin = $result_total_admin['total_admin'];
 
-// Query untuk menghitung jumlah barang yang pernah dipinjam
-$sql_total_peminjaman = "SELECT COUNT(*) AS total_peminjaman FROM pinjams WHERE users_id = '$user_id'";
-$query_total_peminjaman = mysqli_query($conn, $sql_total_peminjaman);
-$result_total_peminjaman = mysqli_fetch_assoc($query_total_peminjaman);
-$total_peminjaman = $result_total_peminjaman['total_peminjaman'];
+// Query untuk menghitung total siswa yang sedang meminjam barang
+$sql_siswa_meminjam = "SELECT COUNT(DISTINCT users_id) AS total_meminjam FROM pinjams WHERE status = 'dipinjam'";
+$query_siswa_meminjam = mysqli_query($conn, $sql_siswa_meminjam);
+$result_siswa_meminjam = mysqli_fetch_assoc($query_siswa_meminjam);
+$total_meminjam = $result_siswa_meminjam['total_meminjam'];
 
-// Query untuk menghitung jumlah barang yang belum dikembalikan
-$sql_belum_dikembalikan = "SELECT COUNT(*) AS total_belum_dikembalikan FROM pinjams WHERE users_id = '$user_id' AND status = 'dipinjam'";
-$query_belum_dikembalikan = mysqli_query($conn, $sql_belum_dikembalikan);
-$result_belum_dikembalikan = mysqli_fetch_assoc($query_belum_dikembalikan);
-$total_belum_dikembalikan = $result_belum_dikembalikan['total_belum_dikembalikan'];
+// Query untuk menghitung total siswa yang telah mengembalikan barang
+$sql_siswa_mengembalikan = "SELECT COUNT(DISTINCT users_id) AS total_mengembalikan FROM pinjams WHERE status = 'dikembalikan';";
+$query_siswa_mengembalikan = mysqli_query($conn, $sql_siswa_mengembalikan);
+$result_siswa_mengembalikan = mysqli_fetch_assoc($query_siswa_mengembalikan);
+$total_mengembalikan = $result_siswa_mengembalikan['total_mengembalikan'];
 
-// Query untuk menghitung total jumlah barang yang ada
-$sql_total_barang = "SELECT SUM(jumlah_pinjam) AS total_barang FROM items";
+// Query untuk menghitung jumlah barang
+$sql_total_barang = "SELECT SUM(jumlah_pinjam) AS total_barang FROM items;";
 $query_total_barang = mysqli_query($conn, $sql_total_barang);
 $result_total_barang = mysqli_fetch_assoc($query_total_barang);
 $total_barang = $result_total_barang['total_barang'];
+
+// Query untuk menghitung jumlah ruangan
+$sql_total_ruangan = "SELECT COUNT(*) AS total_ruangan FROM labs;";
+$query_total_ruangan = mysqli_query($conn, $sql_total_ruangan);
+$result_total_ruangan = mysqli_fetch_assoc($query_total_ruangan);
+$total_ruangan = $result_total_ruangan['total_ruangan'];
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +48,7 @@ $total_barang = $result_total_barang['total_barang'];
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dashboard Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         body {
@@ -119,7 +128,7 @@ $total_barang = $result_total_barang['total_barang'];
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <h2>
-                <a class="navbar-brand" href="#">Peminjaman Barang Lab Siswa</a>
+                <a class="navbar-brand" href="#">Peminjaman Barang Lab Admin</a>
             </h2>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -132,7 +141,13 @@ $total_barang = $result_total_barang['total_barang'];
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="ui/pinjams/rekap_peminjaman.php">Pinjam Barang</a>
+                            <a class="nav-link" href="ui/labs/labs.php">Daftar Ruangan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="ui/barang/barang.php">Barang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="ui/pinjams/admin_rekap_peminjaman.php">Data Pinjam Barang</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="controller/logout.php">Log Out</a>
@@ -145,13 +160,6 @@ $total_barang = $result_total_barang['total_barang'];
 
     <br><br><br>
 
-    <!-- Welcome Text -->
-    <div class="welcome-text">
-        <form action="controller/logout.php" method="POST">
-            <h1>Selamat Datang, <?php echo $_SESSION['nama']; ?>!</h1>
-        </form>
-    </div>
-
     <!-- Cards -->
     <div class="container my-5">
         <div class="row text-center">
@@ -159,8 +167,8 @@ $total_barang = $result_total_barang['total_barang'];
             <div class="col-sm-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Jumlah Barang yang Pernah Dipinjam:</h5>
-                        <p class="card-text"><?php echo $total_peminjaman; ?></p>
+                        <h5 class="card-title">Jumlah Seluruh Siswa:</h5>
+                        <p class="card-text"><?php echo $total_siswa; ?></p>
                     </div>
                 </div>
             </div>
@@ -168,8 +176,8 @@ $total_barang = $result_total_barang['total_barang'];
             <div class="col-sm-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Jumlah Barang yang Belum Dikembalikan:</h5>
-                        <p class="card-text"><?php echo $total_belum_dikembalikan; ?></p>
+                        <h5 class="card-title">Total Siswa yang sedang Meminjam Barang:</h5>
+                        <p class="card-text"><?php echo $total_meminjam; ?></p>
                     </div>
                 </div>
             </div>
@@ -177,8 +185,35 @@ $total_barang = $result_total_barang['total_barang'];
             <div class="col-sm-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Total Jumlah Barang yang Tersedia:</h5>
+                        <h5 class="card-title">Total Siswa yang telah Mengembalikan Barang:</h5>
+                        <p class="card-text"><?php echo $total_mengembalikan; ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="col-sm-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jumlah Barang:</h5>
                         <p class="card-text"><?php echo $total_barang; ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 5 -->
+            <div class="col-sm-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jumlah Ruangan:</h5>
+                        <p class="card-text"><?php echo $total_ruangan; ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 6 -->
+            <div class="col-sm-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jumlah Admin:</h5>
+                        <p class="card-text"><?php echo $total_admin; ?></p>
                     </div>
                 </div>
             </div>
@@ -189,6 +224,3 @@ $total_barang = $result_total_barang['total_barang'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
